@@ -1,5 +1,5 @@
+import FreeCAD
 import FreeCADGui
-import FreeCAD as App
 import Part
 
 
@@ -7,30 +7,30 @@ class CreateBoxCommand:
     def GetResources(self):
         return {
             "MenuText": "Create Test Box",
-            "ToolTip": "Creates a simple cube"
+            "ToolTip": "Create a simple test box",
         }
 
     def Activated(self):
-        doc = App.ActiveDocument
+        doc = FreeCAD.ActiveDocument
 
         if doc is None:
-            doc = App.newDocument()
+            doc = FreeCAD.newDocument("Cad_AI_Test")
 
-        box = doc.addObject("Part::Box", "TestBox")
-        box.Length = 10
-        box.Width = 10
-        box.Height = 10
+        box = Part.makeBox(20, 20, 20)
+
+        obj = doc.addObject("Part::Feature", "AI_Test_Box")
+        obj.Shape = box
 
         doc.recompute()
 
     def IsActive(self):
         return True
-
+    
 class AskAICommand:
     def GetResources(self):
         return {
             "MenuText": "Ask AI",
-            "ToolTip": "Generate FreeCAD geometry from a text prompt"
+            "ToolTip": "Generate CAD from a text prompt",
         }
 
     def Activated(self):
@@ -38,8 +38,8 @@ class AskAICommand:
 
         prompt, ok = QtGui.QInputDialog.getText(
             None,
-            "Ask AI CAD Assistant",
-            "Describe what you want to create:"
+            "CAD AI Assistant",
+            "Describe the part you want to create:"
         )
 
         if not ok or not prompt:
@@ -54,19 +54,30 @@ class AskAICommand:
     def IsActive(self):
         return True
 
-FreeCADGui.addCommand("Create_Test_Box", CreateBoxCommand())
-
-
-class AIWorkbench(FreeCADGui.Workbench):
-    MenuText = "AI Assistant"
-    ToolTip = "AI CAD Assistant Workbench"
+class CadAIWorkbench(FreeCADGui.Workbench):
+    MenuText = "CAD AI Assistant"
+    ToolTip = "AI assistant for FreeCAD"
 
     def Initialize(self):
-        FreeCADGui.addCommand("Create_Test_Box", CreateBoxCommand())
-        FreeCADGui.addCommand("Ask_AI", AskAICommand())
+        FreeCADGui.addCommand(
+            "Create_Test_Box",
+            CreateBoxCommand()
+        )
 
-        self.appendToolbar("AI Tools", ["Create_Test_Box", "Ask_AI"])
-        self.appendMenu("AI Tools", ["Create_Test_Box", "Ask_AI"])
+        FreeCADGui.addCommand(
+            "Ask_AI",
+            AskAICommand()
+        )
+
+        self.appendToolbar(
+            "CAD AI Tools",
+            ["Create_Test_Box", "Ask_AI"]
+        )   
+
+        self.appendMenu(
+             "CAD AI Tools",
+             ["Create_Test_Box", "Ask_AI"]
+)
 
     def GetClassName(self):
         return "Gui::PythonWorkbench"

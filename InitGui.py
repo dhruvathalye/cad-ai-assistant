@@ -1,4 +1,4 @@
 import FreeCADGui
-from AIWorkbench import AIWorkbench
+import AIWorkbench
 
-FreeCADGui.addWorkbench(AIWorkbench())
+FreeCADGui.addWorkbench(AIWorkbench.CadAIWorkbench())
