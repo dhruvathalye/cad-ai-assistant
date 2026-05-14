@@ -62,7 +62,7 @@ class AIWorkbench(FreeCADGui.Workbench):
     ToolTip = "AI CAD Assistant Workbench"
 
     def Initialize(self):
-        FreeCADGui.addCommand("Create_Test_Box", CreateTestBoxCommand())
+        FreeCADGui.addCommand("Create_Test_Box", CreateBoxCommand())
         FreeCADGui.addCommand("Ask_AI", AskAICommand())
 
         self.appendToolbar("AI Tools", ["Create_Test_Box", "Ask_AI"])
