@@ -26,6 +26,33 @@ class CreateBoxCommand:
     def IsActive(self):
         return True
 
+class AskAICommand:
+    def GetResources(self):
+        return {
+            "MenuText": "Ask AI",
+            "ToolTip": "Generate FreeCAD geometry from a text prompt"
+        }
+
+    def Activated(self):
+        from PySide import QtGui
+
+        prompt, ok = QtGui.QInputDialog.getText(
+            None,
+            "Ask AI CAD Assistant",
+            "Describe what you want to create:"
+        )
+
+        if not ok or not prompt:
+            return
+
+        QtGui.QMessageBox.information(
+            None,
+            "AI Prompt",
+            "You asked:\n\n" + prompt
+        )
+
+    def IsActive(self):
+        return True
 
 FreeCADGui.addCommand("Create_Test_Box", CreateBoxCommand())
 
